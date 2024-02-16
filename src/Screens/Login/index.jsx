@@ -3,7 +3,8 @@ import {styled} from "nativewind";
 import {useEffect, useState} from "react";
 import {InputSolidButton, InputTextButton, InputTextCard} from "../../components";
 import validate from "../../../utilities/formValidator";
-import axios from "axios";
+import {useDispatch, useSelector} from "react-redux";
+import { login } from '../../../redux/store/action/authActions';
 
 
 const Login = ({navigation}) => {
@@ -18,35 +19,32 @@ const Login = ({navigation}) => {
 		if (errors && Object.keys(errors).length > 0) setErrors(validate(values))
 	}, [values])
 	
-	const logIn = async () => {
-		try {
-			const response = await axios.post('http://192.168.29.53:5000/auth/login', values);
-			if (response.status >= 200 && response.status < 300) {
-				console.log('User Logged Successfully');
-				navigation.replace('Home');
-			} else {
-				console.log('Error in Login', response.status);
-				setErrors({ data: response.data });
-			}
-		} catch (error) {
-			console.log('Error in Login', error);
-			if (error.response) {
-				console.log('Error response', error.response.data.error);
-				setErrors({ data: error.response.data.error });
-			} else {
-				console.log('Error message', error.message);
-				setErrors({ data: 'Error in Login: ' + error.message });
-			}
+	const dispatch = useDispatch();
+	
+	const authState = useSelector(state => state.auth);
+	const { token, error } = authState;
+	
+	useEffect(() => {
+		if (token) {
+			console.log('Login successful');
+			navigation.replace('Home');
 		}
-	};
+		if (error) {
+			console.log('Login failed:', error);
+			setErrors({ data: error});
+		}
+	}, [token, error]); // Depend on token and error to re-run the effect
 	
 	const handleFormSubmit = () => {
 		setErrors(validate(values))
-		if(Object.keys(errors).length > 0){
+		if(Object.keys(errors).length > 0 && !!errors['data']){
 			console.log('Errors in form')
 			console.log(errors)
 		}else{
-			logIn().then(r => ({})).catch(e => console.log('Error in login', e))
+			dispatch(login(values))
+				.then(() => {})
+				.catch((e) => console.log('Error in login', e));
+			// logIn().then(() =>{} ).catch(e => console.log('Error in login', e))
 		}
 	}
 	

@@ -42,7 +42,7 @@ const Register = ({navigation}) => {
 	
 	const handleFormSubmit = () => {
 		setErrors(validate(values))
-		if(Object.keys(errors).length > 0){
+		if(Object.keys(errors).length > 0 && !!errors['data']){
 			console.log('Errors in form')
 		}else{
 			signUp()
