@@ -35,10 +35,10 @@ const Blog = ({route, navigation}) => {
 	}, [id]);
 	
 	return (
-		<View className={'relative flex-1 items-center justify-center py-8'}>
-			<View className={'min-h-16'}>
+		<View className={'relative flex-1 items-center justify-center py-14'}>
+			<View className={'min-h-16 w-full px-14'}>
 				<CardWrapper customTailwindCss={'h-full w-full'}>
-					<View className={'px-2 py-2'}>
+					<View className={'px-2 py-2 w-full'}>
 						<View className={'border-b border-indigo-900 py-2'}>
 							<Text className={'text-xl font-bold text-indigo-950'}>{blog.title}</Text>
 							<Text className={'text-gray-600 italic'}>~{blog.author}</Text>
