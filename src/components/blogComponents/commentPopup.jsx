@@ -16,7 +16,7 @@ const CommentPopup = ({ comments, isVisible, onClose , userId, blogId}) => {
 				userId:userId,
 				blogId:blogId,
 			});
-			if(response.status === 200){
+			if(response.status === 201){
 				// console.log(response.data);
 				// console.log("Comment added successfully");
 				setNewComment("");
@@ -35,14 +35,17 @@ const CommentPopup = ({ comments, isVisible, onClose , userId, blogId}) => {
 	};
 	
 	return (
+		/* eslint-disable */
+		// noinspection JSUnresolvedVariable,JSUnresolvedFunction
 		<Modal  isVisible={isVisible} onBackdropPress={onClose}>
 			<View className={"bg-white p-4 rounded"}>
 				<Text className={"text-lg font-bold mb-2"} >Comments:</Text>
 				<ScrollView className={"mb-2"}>
 					{comments.length > 0 ? comments.map((comment) => (
-						<View key={comment._id} className={"p-2 border"}>
-							<Text className={"font-bold"}>{comment?.userId}</Text>
+						<View key={comment._id} className={"p-2 border w-full"}>
+							<Text className={"font-bold"}>{comment?.userNames[0].name ?? comment?.userId}</Text>
 							<Text>{comment.comment}</Text>
+							<Text className={"text-xs text-gray-500 text-right"}>{new Date(comment.createdAt).toDateString()}</Text>
 						</View>
 					))
 					: <Text>No comments yet</Text>}
@@ -56,6 +59,7 @@ const CommentPopup = ({ comments, isVisible, onClose , userId, blogId}) => {
 				<InputSolidButton btnText={"Add Comment"} onClick={handleAddComment} />
 			</View>
 		</Modal>
+		/* eslint-enable */
 	);
 };
 
