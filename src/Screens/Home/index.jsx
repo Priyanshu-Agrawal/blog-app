@@ -1,4 +1,4 @@
-import {FlatList, Text, TouchableOpacity, View} from "react-native";
+import {Text, TouchableOpacity, View} from "react-native";
 import {useEffect, useState} from "react";
 import axios from "axios";
 import blogCard from "../../components/blogComponents/blogCard";
@@ -18,7 +18,11 @@ const Home = ({navigation}) => {
 	}, []);
 	return (
 		<View className={'relative box-border bg-transparent h-full w-full py-2'}>
-			<FlashList data={blogs} renderItem={({item}) => blogCard({...item, navigation})} keyExtractor={item => item._id} estimatedItemSize={138} />
+			<FlashList
+				data={blogs}
+				renderItem={({item}) => blogCard({...item, navigation})}
+				keyExtractor={item => item._id}
+				estimatedItemSize={138}/>
 			
 			
 			{/*Flat list is Breaking here*/}

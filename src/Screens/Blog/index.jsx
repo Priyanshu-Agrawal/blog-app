@@ -4,12 +4,19 @@ import axios from "axios";
 import CardWrapper from "../../components/hoc/cardWrapper";
 import {InputTextButton} from "../../components";
 import {API_URL} from "../../constants";
+import CommentPopup from "../../components/blogComponents/commentPopup";
+import {useSelector} from "react-redux";
 
 const Blog = ({route, navigation}) => {
 	const {id} = route.params;
 	const [blog, setBlog] = useState({});
 	const [commentPopup, setCommentPopup] = useState(false);
 	const [comments, setComments] = useState([])
+	
+	
+	
+	const authState = useSelector(state => state.auth);
+	const user  = JSON.parse(authState.user);
 	
 	const fetchBlog = async () => {
 		try {
@@ -18,6 +25,13 @@ const Blog = ({route, navigation}) => {
 				const authorResponse = await axios.get(`${API_URL}/users/` + response.data.userId);
 				if (authorResponse.status === 200) {
 					setBlog({...response.data, author: authorResponse.data.name});
+				}
+			}
+			if (response.status === 200) {
+				const commentsResponse = await axios.get(`${API_URL}/comments?blogId=` + id);
+				if (commentsResponse.status === 200) {
+					setComments(commentsResponse.data);
+					
 				}
 			}
 			navigation.setOptions({title: response.data.title})
@@ -50,9 +64,17 @@ const Blog = ({route, navigation}) => {
 				</CardWrapper>
 			</View>
 			<InputTextButton text={'Comment'} onClick={() => setCommentPopup(!commentPopup)}/>
-			{/*{commentPopup && <commentViewPopup comments={comments} />}*/}
-		</View>
-	)
-}
-
-export default Blog;
+			{commentPopup && (
+					<CommentPopup
+						blogId={id}
+						userId={user._id}
+						comments={comments}
+						isVisible={commentPopup}
+						onClose={() => setCommentPopup(false)}
+					/>
+				)}
+				< /View>
+				)
+			}
+			
+			export default Blog;

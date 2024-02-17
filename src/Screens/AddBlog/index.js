@@ -4,7 +4,6 @@ import CardWrapper from "../../components/hoc/cardWrapper";
 import {useState} from "react";
 import axios from "axios";
 import {content} from "../../../tailwind.config";
-import AsyncStorage from "@react-native-async-storage/async-storage";
 import {useSelector} from "react-redux";
 import {API_URL} from "../../constants";
 
@@ -16,7 +15,6 @@ const AddBlog = () => {
 	const authState = useSelector(state => state.auth);
 	const { user } = authState;
 	const handleTextChange = (text, field) => {
-		console.log('text', text, field);
 		setValues(prevValues => ({...prevValues, [field]: text}))
 	}
 	
