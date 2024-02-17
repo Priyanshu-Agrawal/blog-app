@@ -1,14 +1,16 @@
 import axios from 'axios';
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import {API_URL} from "../../../src/constants";
 
 export const login = (credentials) => {
 	return async (dispatch) => {
 		try {
-			const response = await axios.post('http://192.168.29.53:5000/auth/login', credentials);
+			const response = await axios.post(`${API_URL}/auth/login`, credentials);
 			if (response.status >= 200 && response.status < 300) {
 				console.log('User Logged Successfully');
 				await AsyncStorage.setItem('token', response.data.token);
-				dispatch({ type: 'LOGIN_SUCCESS', payload: response.data.token });
+				await AsyncStorage.setItem('user', JSON.stringify(response.data.user));
+				dispatch({ type: 'LOGIN_SUCCESS', payload: {token: response.data.token, user: response.data.user} });
 				return {data: response.data};
 			} else {
 				console.log('Error in Login', response.status);
@@ -34,9 +36,10 @@ export const login = (credentials) => {
 export const fetchTokenOnAppLoad = () => async (dispatch) => {
 	try {
 		const token = await AsyncStorage.getItem('token');
-		if (token) {
-			// Dispatch the LOGIN_SUCCESS action with the retrieved token
-			dispatch({ type: 'LOGIN_SUCCESS', payload: token });
+		const user = await AsyncStorage.getItem('user');
+		if (token && user) {
+			// Dispatch the LOGIN_SUCCESS action with the retrieved tokern
+			dispatch({ type: 'LOGIN_SUCCESS', payload: {token: token, user: user} });
 		}
 	} catch (error) {
 		console.error('Error fetching token from storage:', error);

@@ -4,6 +4,7 @@ import {useEffect, useState} from "react";
 import {InputCheckBox, InputSolidButton, InputTextButton, InputTextCard} from "../../components";
 import validate from "../../../utilities/formValidator";
 import axios from "axios";
+import {API_URL} from "../../constants";
 
 const Register = ({navigation}) => {
 	const initialValues = {name: '', email: '', password: '', confirmPassword: '', eula: false}
@@ -20,7 +21,7 @@ const Register = ({navigation}) => {
 	
 	const signUp = async () => {
 		try {
-			const response = await axios.post('http://192.168.29.53:5000/auth/register', values);
+			const response = await axios.post(`${API_URL}/auth/register`, values);
 			if (response.status === 201) {
 				console.log('User Registered Successfully');
 				navigation.navigate('Login');

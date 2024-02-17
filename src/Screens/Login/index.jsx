@@ -22,18 +22,19 @@ const Login = ({navigation}) => {
 	const dispatch = useDispatch();
 	
 	const authState = useSelector(state => state.auth);
-	const { token, error } = authState;
+	const { token, user,  error } = authState;
 	
 	useEffect(() => {
 		if (token) {
-			console.log('Login successful');
+			// console.log('Login successful');
+			// console.log('User:', user);
 			navigation.replace('Home');
 		}
 		if (error) {
 			console.log('Login failed:', error);
 			setErrors({ data: error});
 		}
-	}, [token, error]); // Depend on token and error to re-run the effect
+	}, [token, error, user]); // Depend on token and error to re-run the effect
 	
 	const handleFormSubmit = () => {
 		setErrors(validate(values))

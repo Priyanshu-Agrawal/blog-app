@@ -3,6 +3,9 @@
     "name": "blog-app",
     "slug": "blog-app",
     "version": "1.0.0",
+    "extra": {
+      "apiUrl": "@API_URL"
+    },
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "light",
